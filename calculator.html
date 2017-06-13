@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <head>
+
+	<title>SIMPLE JS CALCULATOR</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="{{ url_for('static', filename='calculator_style.css') }}" type="text/css">
+        <link rel="stylesheet" type="text/css" href="calculator_style.css" media="screen" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<body>
+
+
+<div id="calculator">
+	<!-- Screen and clear key -->
+	<div class="top">
+		<span class="clear">C</span>
+		<div class="screen"></div>
+	</div>
+
+	<div class="keys">
+		<!-- Calculator buttons and operators -->
+		<span>7</span>
+		<span>8</span>
+		<span>9</span>
+		<span class="operator">+</span>
+		<span>4</span>
+		<span>5</span>
+		<span>6</span>
+		<span class="operator">-</span>
+		<span>1</span>
+		<span>2</span>
+		<span>3</span>
+		<span class="operator">/</span>
+		<span>0</span>
+		<span>.</span>
+		<span class="eval">=</span>
+		<span class="operator">*</span>
+	</div>
+</div>
+
+
+
+<footer class="mainFooter">
+
+<p>Copyright &copy; BOKOR ATTILA CoDeCoOlL</p>
+
+
+</footer>
+
+
+<script>
+
+
+var keys = document.querySelectorAll('#calculator span');
+var operators = ['+', '-', 'x', '÷'];
+var decimalAdded = false;
+
+// ONE CLICK EVENT FOR ALL BUTTONS
+
+for(var i = 0; i < keys.length; i++) {
+	keys[i].onclick = function(e) {
+
+		// INPUT GATHERING
+
+		var input = document.querySelector('.screen');
+		var inputVal = input.innerHTML;
+		var btnVal = this.innerHTML;
+
+		// IF CLEAR BUTTON PRESSED CLEAR
+
+		if(btnVal == 'C') {
+			input.innerHTML = '';
+			decimalAdded = false;
+		}
+
+		// EQUAL BUTTON PRESSED GET FINAL VALUE
+
+		else if(btnVal == '=') {
+			var equation = inputVal;
+			var lastChar = equation[equation.length - 1];
+
+			// REPLACE BUTTON CARACTERS WITH VALUE IS NO MORE NEEDED
+
+			// equation = equation.replace(/x/g, '*').replace(/÷/g, '/');
+
+
+			if(operators.indexOf(lastChar) > -1 || lastChar == '.')
+				equation = equation.replace(/.$/, '');
+
+			if(equation)
+				input.innerHTML = eval(equation);
+
+			decimalAdded = false;
+		}
+
+
+		else if(operators.indexOf(btnVal) > -1) {
+
+
+
+			var lastChar = inputVal[inputVal.length - 1];
+
+			// PREVENT ADDING AN OPERATOR IN FIRST CASE
+
+			if(inputVal != '' && operators.indexOf(lastChar) == -1)
+				input.innerHTML += btnVal;
+
+			// IF THE MEMORY IS EMPTY WE CAN PRESS - TO ASSIGN A NEGATIVE NUMBER
+
+			else if(inputVal == '' && btnVal == '-')
+				input.innerHTML += btnVal;
+
+			// IF A NEW OPERATOR PRESSED CHANGE THE OPERATOR
+
+			if(operators.indexOf(lastChar) > -1 && inputVal.length > 1) {
+				// Here, '.' matches any character while $ denotes the end of string, so anything (will be an operator in this case) at the end of string will get replaced by new operator
+				input.innerHTML = inputVal.replace(/.$/, btnVal);
+			}
+
+			decimalAdded =false;
+		}
+
+		// DECIMAL NUMBER ADDED
+
+		else if(btnVal == '.') {
+			if(!decimalAdded) {
+				input.innerHTML += btnVal;
+				decimalAdded = true;
+			}
+		}
+
+
+		else {
+			input.innerHTML += btnVal;
+		}
+
+
+		e.preventDefault();
+	}
+}
+
+</script>
+</body>
+</html>
